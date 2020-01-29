@@ -14,13 +14,23 @@
     <servlet-class>app.App</servlet-class>
     <init-param> 
         <param-name>title</param-name> 
-        <param-value>SUPER SUPER SAULLE (SSS)</param-value> 
+        <param-value>title from web.xml</param-value> 
     </init-param>
 </servlet>
 
+<servlet>
+    <servlet-name>AggiungiParola</servlet-name>
+    <servlet-class>app.Add</servlet-class>
+</servlet>
+
 <servlet-mapping>
-<servlet-name>MyHttpServlet</servlet-name>
-<url-pattern>/welcome</url-pattern>
+    <servlet-name>MyHttpServlet</servlet-name>
+    <url-pattern>/welcome</url-pattern>
+</servlet-mapping>
+
+<servlet-mapping>
+    <servlet-name>AggiungiParola</servlet-name>
+    <url-pattern>/add</url-pattern>
 </servlet-mapping>
 
 </web-app>
