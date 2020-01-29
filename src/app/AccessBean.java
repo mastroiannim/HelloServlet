@@ -14,8 +14,13 @@ public class AccessBean {
     Connection connection;
     static String dbPath;
     static String databaseURL;
+    String[] elenco;
 
     String significato;
+
+    public AccessBean(String databaseURL){
+        
+    }
 
     public AccessBean(){
         try{	
@@ -39,8 +44,49 @@ public class AccessBean {
         }
     }
 
+    public String getDbFilePath(){
+        return dbPath;
+    }
+
     public void setParola(String p){
         parola = p;
+    }
+
+    public String getParola(){
+        return parola;
+    }
+
+    public String[] getElenco(){
+        String[] ret = {""};
+        try {
+            StringBuilder ulList = new StringBuilder();
+            ulList.append("<select name=\"parola\">");
+            connection = DriverManager.getConnection(databaseURL);
+            int conta=0;
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT count(*) FROM Dizionario");
+            while (resultSet.next()) {
+                conta = resultSet.getInt(1);
+            }
+
+            Statement st = connection.createStatement(); 
+            ResultSet rs = st.executeQuery("SELECT * FROM Dizionario ");
+
+            ret = new String[conta];
+            int i = 0;
+            while(rs.next()) {
+                String p = rs.getString("parola");
+                ret[i]= p;
+                i++;
+            }
+            
+            return ret;
+
+          
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return ret;
     }
 
     public String getParole(){
@@ -146,7 +192,7 @@ public class AccessBean {
             e.printStackTrace();
         }
 
-        String dbPath = new File("WebContent/WEB-INF/database.accdb").getAbsolutePath().toString();
+        dbPath = new File("WebContent/WEB-INF/database.accdb").getAbsolutePath().toString();
         databaseURL = "jdbc:ucanaccess://" + dbPath;
 
         try (Database db = DatabaseBuilder.create(FileFormat.V2010, new File(dbPath))) {
@@ -157,6 +203,8 @@ public class AccessBean {
 
         createDataBase();
         popolateDataBase();
+
+        System.out.println(new AccessBean(databaseURL).getElenco()[0]);
     }   
 
 }
